@@ -14,19 +14,31 @@ def most_viewed():
         #Cursor
         cur = conn.cursor()
         print("\nConnection established")
-        # Uitvoer query, atribuut, atribuut moet je vervangen voor de atributen die je wilt fetchen.
-        cur.execute(f"""SELECT prodid, COUNT(*) AS viewed
+        # Uitvoer query
+        cur.execute(f"""            
+        DROP TABLE IF EXISTS most_viewed;
+            create table most_viewed(
+                prodid varchar(255),
+                viewed int
+            );
+
+        SELECT prodid, COUNT(*) AS viewed
                         FROM profiles_previously_viewed
                         GROUP BY prodid
                         HAVING COUNT(*) > 1
-                        ORDER BY viewed DESC;""")
+                        ORDER BY viewed DESC;
+        """)
         # Je wilt alles fetchen van de query die je hebt uitgevoerd
         rows = cur.fetchall()
 
         # Forloop die alles in elke row steeds alle colums af gaat. Per column die je hebt, moet je een {r[index]}
         # toevoegen om hem te printen
+
         for r in rows:
-            print(f"Product {r[0]} is {r[1]} keer bekeken")
+            cur.execute('''insert into most_viewed (prodid, viewed) values (%s, %s)''',
+                        (r[0],r[1]))
+        # commit inserts
+        conn.commit()
 
     except pysql.OperationalError as x:
         print(f"Connection error : {x}")
