@@ -1,4 +1,8 @@
 import psycopg2 as pysql
+##########################
+# Colin van Lienden
+# rec-engine
+##########################
 
 def most_viewed():
     'Conn naar db'
@@ -33,18 +37,17 @@ def most_viewed():
 
         # Forloop die alles in elke row steeds alle colums af gaat. Per column die je hebt, moet je een {r[index]}
         # toevoegen om hem te printen
-
+        print('write data to database...')
         for r in rows:
             cur.execute('''insert into most_viewed (prodid, viewed) values (%s, %s)''',
                         (r[0],r[1]))
-        # commit inserts
-        conn.commit()
 
     except pysql.OperationalError as x:
         print(f"Connection error : {x}")
 
     finally:
-
+        # commit inserts
+        conn.commit()
         # Sluit de cursor
         cur.close()
         # sluit connectie
