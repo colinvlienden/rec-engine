@@ -4,8 +4,13 @@ import psycopg2 as pysql
 # rec-engine
 ##########################
 
+
+#########################
+## MEEST BEKENEN REC   ##
+#########################
+#Slaat data op in een tabel!
 def most_viewed():
-    'Conn naar db'
+    'Slaat een lijst met meest verkochten producten op in een nieuwe tabel in de database'
     try:
         # Connect met de database
         conn = pysql.connect(
@@ -18,7 +23,9 @@ def most_viewed():
         #Cursor
         cur = conn.cursor()
         print("\nConnection established")
+
         # Uitvoer query
+        #Maak gebruik van een nieuwe tabel voor het opslaan van data
         cur.execute(f"""            
         DROP TABLE IF EXISTS most_viewed;
             create table most_viewed(
@@ -57,7 +64,9 @@ def most_viewed():
 #most_viewed()
 
 
-
+#########################
+## SAME CATOGORY REC   ##
+#########################
 # Alleen in print !!
 def same_cat_rec(profid):
     'Laat producten zien die overheen komen met de catogory waarnaar de klant heeft gezocht'
@@ -137,12 +146,12 @@ def same_cat_rec(profid):
 #same_cat_rec('59dcec16a56ac6edb4d93f68')
 #same_cat_rec('59dcea9ba56ac6edb4d7ab18')
 
-
-## SEGMENT
-
+#######################
+## SEGMENT REC       ##
+#######################
 # Alleen in print !!
 def same_seg_rec(profid):
-    'Laat producten zien die overheen komen met het segment van de klant'
+    'Laat producten zien die overheen komen met het segment van de klant (meest verkochten producten van dat segtment)'
     try:
         # Connect met de database
         conn = pysql.connect(
@@ -173,6 +182,8 @@ def same_seg_rec(profid):
 
         # Forloop die alles in elke row steeds alle colums af gaat. Per column die je hebt, moet je een {r[index]}
         # toevoegen om hem te printen
+
+        print('Andere kochten ook:')
         for r in rows:
             # max aantal producten meest bekeken door segment overeenkomst
             max = 10
@@ -199,7 +210,7 @@ def same_seg_rec(profid):
                 if 0 == max:
                     break
 
-                print(y)
+                print(y[1])
                 max-=1
             break
 
@@ -215,7 +226,8 @@ def same_seg_rec(profid):
         # sluit connectie
         conn.close()
         print("\nConnection closed")
+
 #test data
-same_seg_rec('59dceb92a56ac6edb4d8b34a')
+#same_seg_rec('59dceb92a56ac6edb4d8b34a')
 #same_seg_rec('59dcec16a56ac6edb4d93f68')
 #same_seg_rec('59dcea9ba56ac6edb4d7ab18')
