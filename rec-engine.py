@@ -105,13 +105,16 @@ def same_cat_rec(profid):
             subsubcat = r[5]
 
             print(f"\n{r[3]} - {r[4]} - {r[5]}:")
+            #Zoeken naar producten met het zelfde cat, subcat, subsubcat
             cur.execute(f"""            
                 SELECT id,name,category,subcategory,subsubcategory FROM products
                 WHERE category = '{cat}'
                 AND subcategory = '{subcat}'
                 AND subsubcategory = '{subsubcat}'
             """)
+
             rec = cur.fetchall()
+            #print aantal producten uit de data van hierboven
             for y in rec:
                 if 0 == max:
                     break
@@ -124,13 +127,13 @@ def same_cat_rec(profid):
 
     finally:
         # commit inserts
-        conn.commit()
+        # conn.commit()
         # Sluit de cursor
         cur.close()
         # sluit connectie
         conn.close()
         print("\nConnection closed")
-
+#test data
 #same_cat_rec('59dceb92a56ac6edb4d8b34a')
 #same_cat_rec('59dcec16a56ac6edb4d93f68')
 #same_cat_rec('59dcea9ba56ac6edb4d7ab18')
