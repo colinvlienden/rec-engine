@@ -1,6 +1,6 @@
 import psycopg2 as pysql
 
-def previously_viewed(profid):
+def most_viewed():
     'Conn naar db'
     try:
         # Connect met de database
@@ -15,16 +15,18 @@ def previously_viewed(profid):
         cur = conn.cursor()
         print("\nConnection established")
         # Uitvoer query, atribuut, atribuut moet je vervangen voor de atributen die je wilt fetchen.
-        # zet select * from tabel om alles van een tabel te fetchen
-        cur.execute(f"select * from profiles_previously_viewed where profid = '{profid}'")
+        cur.execute(f"""SELECT prodid, COUNT(*) AS viewed
+                        FROM profiles_previously_viewed
+                        GROUP BY prodid
+                        HAVING COUNT(*) > 1
+                        ORDER BY viewed DESC;""")
         # Je wilt alles fetchen van de query die je hebt uitgevoerd
         rows = cur.fetchall()
 
-        print(f"\nPreviously viewed: {profid}")
         # Forloop die alles in elke row steeds alle colums af gaat. Per column die je hebt, moet je een {r[index]}
         # toevoegen om hem te printen
         for r in rows:
-            print(r[1])
+            print(f"Product {r[0]} is {r[1]} keer bekeken")
 
     except pysql.OperationalError as x:
         print(f"Connection error : {x}")
@@ -37,6 +39,4 @@ def previously_viewed(profid):
         conn.close()
         print("\nConnection closed")
 
-previously_viewed('5a393d68ed295900010384ca')
-previously_viewed('5a3945b0ed29590001038fea')
-previously_viewed('5a396e36a825610001bbb368')
+most_viewed()
