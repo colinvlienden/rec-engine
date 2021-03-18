@@ -1,1 +1,1 @@
-# rec-engine
+# Business rules voor Recommendation Engine
