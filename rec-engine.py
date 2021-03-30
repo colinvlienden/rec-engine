@@ -15,9 +15,9 @@ def most_viewed():
         # Connect met de database
         conn = pysql.connect(
             host='localhost',  # De host waarop je database runt
-            database='huwebwinkel',  # Database naam
+            database='DATABASENAME',  # Database naam
             user='postgres',  # Als wat voor gebruiker je connect, standaard postgres als je niets veranderd
-            password='IXXKnbmew'  # Wachtwoord die je opgaf bij installatie
+            password='PASSWORD'  # Wachtwoord die je opgaf bij installatie
             # port=5432 runt standaard op deze port en is alleen nodig als je de port handmatig veranderd
         )
         #Cursor
